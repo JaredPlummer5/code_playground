@@ -8,7 +8,7 @@ function useProjectSetup(id: string) {
   const [files, setFiles] = useState([]);
   const [currentFile, setCurrentFile] = useState(null);
   const [sourceCodeObject, setSourceCodeObject] = useState(null);
-
+  const [projectOwner, setProjectOwner] = useState("");
   useEffect(() => {
     setUpProject();
   }, []);
@@ -23,7 +23,7 @@ function useProjectSetup(id: string) {
       setLanguageId(newProject.languageId);
       setFiles(newProject.files);
       setCurrentFile(newProject.files[0]);
-
+      setProjectOwner(newProject.owner);
       // Set sourceCodeObject based on project setup
       if (newProject.languageId == 10) {
         setSourceCodeObject({
@@ -51,6 +51,8 @@ function useProjectSetup(id: string) {
     files,
     currentFile,
     sourceCodeObject,
+    projectOwner,
+    setProjectOwner,
     setUpProject,
     setProject,
     setProjectLab,

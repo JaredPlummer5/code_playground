@@ -9,6 +9,8 @@ import { emmetHTML } from "emmet-monaco-es";
 import EditorAndPreview from "@/app/components/EditorAndPreview";
 import useMonacoContributions from "@/app/hooks/useMonacoImports";
 import useProjectSetup from "@/app/hooks/useProjectSetup";
+import { pusherClient } from "@/lib/pusher";
+import { useUser } from "@clerk/nextjs";
 
 const ProjectPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -18,7 +20,8 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
   const disposeEmmetHTMLRef = useRef<() => void | undefined>();
   const [isRunLoading, setIsRunloading] = useState(false);
   const [isSaveLoading, setIsSaveloading] = useState(false);
-
+  const [partnerRole, setPartnerRole] = useState("Driver");
+  const { isSignedIn, user, isLoaded } = useUser();
   const isWebMode = (langId: number) => langId === 10;
   const additionalFiles = (langId: number) => langId == 82;
 
@@ -30,6 +33,8 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
     files,
     currentFile,
     sourceCodeObject,
+    projectOwner,
+    setProjectOwner,
     setUpProject,
     setProject,
     setProjectLab,
@@ -41,7 +46,45 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
 
   // hook to set up monaco editor dependencies
   useMonacoContributions();
+  const changeNavigatorcode = (sourceCode: string) => {
+    console.log(partnerRole);
+    if (partnerRole === "Navigator") {
+      handleCodeChange(sourceCode);
+      console.log(partnerRole);
+    }
+  };
 
+  const changeNavigatorFile = (newFile: string) => {
+    console.log(partnerRole);
+    if (partnerRole === "Navigator") {
+      handleFileChange(newFile);
+      console.log(partnerRole);
+    }
+  };
+  useEffect(() => {
+    pusherClient.subscribe(id);
+    pusherClient.bind("project-message", (sourceCode: string) => {
+      changeNavigatorcode(sourceCode);
+    });
+    // pusherClient.bind("file-change", (newFile: string) => {
+    //   changeNavigatorFile(newFile);
+    // });
+    if(user?.username !== projectOwner) {
+      console.log(user?.username, projectOwner);
+      setPartnerRole("Navigator");
+    }
+  }, [partnerRole, user]);
+
+  // useEffect(() => {
+  //   if(isLoaded) {
+  //     if(user.username === projectOwner) {
+  //       setPartnerRole("Driver");
+  //     } else {
+  //       setPartnerRole("Navigator");
+  //     }
+  //     console.log(projectOwner, user.username);
+  //   }
+  // }, [user]);
   // up date the preview when any of it's dependencies are updated
   useEffect(() => {
     if (mode == "preview" && project) {
@@ -82,12 +125,31 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
     preview.appendChild(iframe);
   };
 
-  const handleFileChange = (newFileName: string) => {
+  const handleFileChange = async (newFileName: string) => {
     let newCurrentFile = files.find((file) => file.fileName === newFileName);
     setCurrentFile(newCurrentFile);
+    if (partnerRole === "Driver") {
+      await fetch("/api/sockets/session/fileChange", {
+        method: "POST",
+        body: JSON.stringify({
+          newFile: currentFile,
+          projectId: id,
+        }),
+      });
+    }
   };
 
-  const handleCodeChange = (value: string) => {
+  const handleCodeChange = async (value: string) => {
+
+    if (partnerRole === "Driver") {
+      await fetch("/api/sockets/session", {
+        method: "POST",
+        body: JSON.stringify({
+          sourceCode: value,
+          projectId: id,
+        }),
+      });
+    }
     if (isWebMode(languageId)) {
       const updatedFile = { ...currentFile, sourceCode: value };
       const updatedFiles = files.map((file) =>
@@ -109,6 +171,7 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
       setFiles(updatedFiles);
     }
   };
+
   const handleRunClick = async () => {
     setIsRunloading(true);
     if (!isWebMode(languageId)) {
@@ -134,7 +197,13 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
       setIsRunloading(false);
     }
   };
-
+  const handleParterRoleSwitch = () => {
+    if (partnerRole === "Driver") {
+      setPartnerRole("Navigator");
+    } else {
+      setPartnerRole("Driver");
+    }
+  };
   const handleSaveClick = async () => {
     setIsSaveloading(true);
     try {
@@ -181,6 +250,7 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
   };
   return (
     <>
+      <button onClick={handleParterRoleSwitch}>{partnerRole}</button>
       <ProjectToolBar
         handleSwitchToChat={handleSwitchToChat}
         handleSwitchToLab={handleSwitchToLab}
@@ -207,7 +277,7 @@ const ProjectPage = ({ params }: { params: { id: string } }) => {
           }
           handleCodeChange={handleCodeChange}
           handleEditorWillMount={handleEditorWillMount}
-          source={currentFile.sourceCode}
+          source={currentFile?.sourceCode}
           sourceCodeObject={sourceCodeObject}
           mode={mode}
           currentFile={currentFile}
