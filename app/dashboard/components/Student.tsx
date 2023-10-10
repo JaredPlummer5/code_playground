@@ -71,13 +71,13 @@ const StudentDashBoard = ({dbUser}) => {
             {/* <Button onClick={() => setOpenModal('dismissible')}>Toggle modal</Button> */}
                 <div className='text-center'>
 
-                    <Link href="/create/project">
-                        <button className='bg-black hover:bg-slate-600 text-white font-bold py-2 px-4 rounded mr-2'>
+                <Link href="/create/project">
+                        <button className='bg-customColor hover:bg-slate-600 text-white font-bold py-2 px-4 rounded mr-2'>
                             New Project
                         </button>
                     </Link>
                     <Link href="/projects">
-                        <button className='bg-black hover:bg-slate-600 text-white font-bold py-2 px-4 rounded ml-2'>
+                        <button className='bg-customColor hover:bg-slate-600 text-white font-bold py-2 px-4 rounded ml-2'>
                             Browse Projects
                         </button>
                     </Link>
