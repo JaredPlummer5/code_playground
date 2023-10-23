@@ -44,5 +44,5 @@ we recomend running `npm run build` followed by `npm run start` you can then vis
 
 ## Demo
 
-<video src="./bitbox_demo.mov" controls="controls" style="max-width: 730px;">
+<video src="https://res.cloudinary.com/dcrnncysg/video/upload/v1698081871/bitbox_demo_m_duapo1.mov" controls="controls" style="max-width: 730px;">
 </video>
