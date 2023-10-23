@@ -42,6 +42,7 @@ we recomend running `npm run build` followed by `npm run start` you can then vis
 * Tailwind
 * Docker
 
-## Contributing
+## Demo
 
-
+<video src="./bitbox_demo.mov" controls="controls" style="max-width: 730px;">
+</video>

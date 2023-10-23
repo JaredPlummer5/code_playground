@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         // }
 
         // Add the new project to the student's projects array
-        const newProject = await Project.create({title: project.title, lab: project.lab, files: project.files, languageId: project.languageId, owner: student.username, assignedBy: teacherUsername})
+        const newProject = await Project.create({title: project.title, lab: project.lab, files: project.files, languageId: project.languageId, owner: student.username,description: project.description, assignedBy: teacherUsername})
         // student.projects.push(newProject._id);
         // await student.save();
         return NextResponse.json(newProject);

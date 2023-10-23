@@ -17,8 +17,8 @@ export async function GET(request: Request, { params }: { params: { owner: strin
 export async function POST(request: Request, { params }: { params: { owner: string } }) {
     const { owner } = params;
     try {
-        const { title, files, lab, languageId } = await request.json();
-        let project = await Project.create({ title, files, lab, languageId, owner });
+        const { title, files, lab, languageId, description } = await request.json();
+        let project = await Project.create({ title, files, lab, languageId, owner, description });
         return NextResponse.json(project);
     } catch (error: any) {
         console.log(error.message);

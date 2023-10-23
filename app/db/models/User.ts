@@ -37,7 +37,11 @@ const userSchema = new mongoose.Schema({
     projects: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
-    }]
+    }],
+        // Description of the project
+    description:{
+        type: String
+    }
     
 });
 
