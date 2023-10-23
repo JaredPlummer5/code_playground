@@ -3,6 +3,7 @@
 CodeCrewlabs is a free and open source e-learning environment with an interactive codepen-like web playground and a multi-language repl built with the judge0 api and monaco editor. You can create projects in multiple programming languages to practice your coding skills and even ask questions about your code or generate labs with our openai integration.
 
 ## Running Locally
+
 You will need to have node, docker, and docker-compose installed on your machine before moving forward. You will also need to sign up and obtain api keys from openai and clerck
 
 Quick Start - Run a copy of CodeCrewLabs by forking our repo, cloning it down to your own machine, and running a few simple commands. After cloning, cd into your local repo and take the following steps.
@@ -24,12 +25,12 @@ Quick Start - Run a copy of CodeCrewLabs by forking our repo, cloning it down to
 
 3. After you have obtained your api keys and placed them in your `.env.local`, run `npm install` in your projects root directory to install all required node packages
 
-4. run `docker-compose up` which will download and configure the docker containers necessary to run the application in development including the judge0 api and mongodb 
+4. run `docker-compose up` which will download and configure the docker containers necessary to run the application in development including the judge0 api and mongodb
 
 5. Once your containers are up and running, and you have the node packages installed,
-we recomend running `npm run build` followed by `npm run start` you can then visiting the running app at http://localhost:3000/.
+we recomend running `npm run build` followed by `npm run start` you can then visiting the running app at <http://localhost:3000/>.
 
-6. You can also see a live preview with automatic updates every time you save by running `npm run dev`.Your live preview will be running on http://localhost:3000/
+6. You can also see a live preview with automatic updates every time you save by running `npm run dev`.Your live preview will be running on <http://localhost:3000/>
 
 ## Development Tech Stack
 
@@ -44,5 +45,5 @@ we recomend running `npm run build` followed by `npm run start` you can then vis
 
 ## Demo
 
-<video src="https://res.cloudinary.com/dcrnncysg/video/upload/v1698081871/bitbox_demo_m_duapo1.mov" controls="controls" style="max-width: 730px;">
-</video>
+[![Video Thumbnail](image.png)](https://res.cloudinary.com/dcrnncysg/video/upload/v1698081871/bitbox_demo_m_duapo1.mov)
+
